@@ -122,7 +122,7 @@ class _MusicViewState extends State<MusicView> {
                                     child: Text(widget.songModel!.artist??"No Artist",overflow:TextOverflow.ellipsis,style: TextStyle(color: Colors.white.withOpacity(0.8),fontSize: 18),)),
                               ],
                             ),
-                          ),
+                          ),  
                           InkWell(
                             onTap: (){
                               setState(() {

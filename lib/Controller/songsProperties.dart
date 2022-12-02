@@ -8,4 +8,5 @@ class SongsProperties{
   static bool isPlaying = false;
   static dynamic FaveSongMusicName=[];
   static dynamic FaveSongSingerName=[];
+  static dynamic PlaylistName=[];
 }
