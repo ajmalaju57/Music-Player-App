@@ -3,12 +3,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
+import 'package:marquee/marquee.dart';
 import 'package:music_player/Controller/songsProperties.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class MusicView extends StatefulWidget {
-  const MusicView({Key? key,this.songModel,this.audioPlayer,this.SongThumb}) : super(key: key);
-  final SongModel? songModel;
+  const MusicView({Key? key,this.songModelList,this.audioPlayer,this.SongThumb}) : super(key: key);
+  final List<SongModel>? songModelList;
   final AudioPlayer? audioPlayer;
   final QueryArtworkWidget? SongThumb;
 
@@ -19,6 +20,8 @@ class MusicView extends StatefulWidget {
 class _MusicViewState extends State<MusicView> {
   Duration _duration = const Duration();
   Duration _position = const Duration();
+  List<AudioSource>songList = [];
+  int currentIndex = 0;
   bool _isFavoriteSongsIcon = false;
   int _isRepeatSongIcon =0;
   bool _isShuffle = false;
@@ -29,16 +32,22 @@ class _MusicViewState extends State<MusicView> {
   }
   void playSong(){
       try {
-        widget.audioPlayer!.setAudioSource(AudioSource.uri(Uri.parse(widget.songModel!.uri!),
-          tag: MediaItem(
-          id: '${widget.songModel!.id}',
-          album: "${widget.songModel!.album}",
-          title: widget.songModel!.title,
-          artUri: Uri.parse('https://example.com/albumart.jpg'),
-        ),
-        ));
+        for(var element in widget.songModelList!){
+          songList.add(AudioSource.uri(Uri.parse(element.uri!),
+            tag: MediaItem(
+              id: '${element.id}',
+              album: "${element.album}",
+              title:element.title,
+              artUri: Uri.parse('https://example.com/albumart.jpg'),
+            ),
+          ));
+        }
+        widget.audioPlayer!.setAudioSource(
+           ConcatenatingAudioSource(children: songList),
+        );
         widget.audioPlayer!.play();
         SongsProperties.isPlaying = true;
+        listenToSongIndex();
       } on Exception catch (e) {
         log("Cannot Pares song");
       }
@@ -57,16 +66,27 @@ class _MusicViewState extends State<MusicView> {
     Duration duration =Duration(seconds: seconds);
     widget.audioPlayer!.seek(duration);
   }
+  void listenToSongIndex(){
+    widget.audioPlayer!.currentIndexStream.listen((event) {
+      setState(() {
+        if(event != null){
+          currentIndex=event;
+          SongsProperties.isPlaying=true;
+        }
+      });
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: ExactAssetImage("${widget.SongThumb!=null?widget.SongThumb:"assets/images/music.jpg"}"),
+          image: ExactAssetImage("assets/images/music.jpg"),
           fit: BoxFit.cover
         )
       ),
       child: Scaffold(
+        resizeToAvoidBottomInset: true,
         backgroundColor: Colors.transparent,
         body: Container(
           decoration: BoxDecoration(
@@ -115,11 +135,12 @@ class _MusicViewState extends State<MusicView> {
                               children: [
                                 SizedBox(
                                    width:270,
-                                    child: Text(widget.songModel!.title,overflow:TextOverflow.ellipsis,style: TextStyle(color: Colors.white.withOpacity(0.9),fontSize: 24,fontWeight: FontWeight.bold),)),
+                                    child:
+                                    Text(widget.songModelList![currentIndex].title,overflow:TextOverflow.ellipsis,style: TextStyle(color: Colors.white.withOpacity(0.9),fontSize: 24,fontWeight: FontWeight.bold),)),
                                 SizedBox(height: 10,),
                                 SizedBox(
                                     width:270,
-                                    child: Text(widget.songModel!.artist??"No Artist",overflow:TextOverflow.ellipsis,style: TextStyle(color: Colors.white.withOpacity(0.8),fontSize: 18),)),
+                                    child: Text(widget.songModelList![currentIndex].artist??"No Artist",overflow:TextOverflow.ellipsis,style: TextStyle(color: Colors.white.withOpacity(0.8),fontSize: 18),)),
                               ],
                             ),
                           ),  
@@ -131,8 +152,8 @@ class _MusicViewState extends State<MusicView> {
                                 }else{
                                   _isFavoriteSongsIcon = false;
                                 }
-                                SongsProperties.FaveSongMusicName.add(widget.songModel!.title);
-                                SongsProperties.FaveSongSingerName.add(widget.songModel!.artist??"No Artist");
+                                SongsProperties.FaveSongMusicName.add(widget.songModelList![currentIndex].title);
+                                SongsProperties.FaveSongSingerName.add(widget.songModelList![currentIndex].artist??"No Artist");
                               });
                             },
                             child: Container(
@@ -182,7 +203,13 @@ class _MusicViewState extends State<MusicView> {
                                 });
                               },
                               child: Container(child: Icon(CupertinoIcons.shuffle,color:_isShuffle? Colors.green:Colors.white,size: 30,))),
-                          Icon(CupertinoIcons.backward_end_fill,color: Colors.white,size: 30,),
+                          InkWell(
+                              onTap: (){
+                                if(widget.audioPlayer!.hasPrevious){
+                                  widget.audioPlayer!.seekToPrevious();
+                                }
+                              },
+                              child: Icon(CupertinoIcons.backward_end_fill,color: Colors.white,size: 30,)),
                           InkWell(
                             onTap: (){
                               setState(() {
@@ -204,7 +231,14 @@ class _MusicViewState extends State<MusicView> {
                               child:SongsProperties.isPlaying?Icon(Icons.pause,color:Color(0xFF000633),size: 45,):Icon(Icons.play_arrow,color:Color(0xFF000633),size: 45,),
                             ),
                           ),
-                          Icon(CupertinoIcons.forward_end_fill,color: Colors.white,size: 30,),
+                          InkWell(
+                              onTap: (){
+                                if(widget.audioPlayer!.hasNext){
+                                  widget.audioPlayer!.seekToNext();
+                                }
+
+                              },
+                              child: Icon(CupertinoIcons.forward_end_fill,color: Colors.white,size: 30,)),
                           InkWell(
                               onTap: (){
                                 setState(() {

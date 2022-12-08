@@ -9,4 +9,5 @@ class SongsProperties{
   static dynamic FaveSongMusicName=[];
   static dynamic FaveSongSingerName=[];
   static dynamic PlaylistName=[];
+  static dynamic SongIndex;
 }

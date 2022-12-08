@@ -6,7 +6,8 @@ import 'package:lottie/lottie.dart';
 import 'package:music_player/Controller/songsProperties.dart';
 
 class TopCard extends StatefulWidget {
-  const TopCard({Key? key}) : super(key: key);
+  final Widget play;
+   TopCard({Key? key,required this.play}) : super(key: key);
 
   @override
   State<TopCard> createState() => _TopCardState();
@@ -68,7 +69,7 @@ class _TopCardState extends State<TopCard> {
                 blur: 30,
                 elevation: 6,
                 height: size.height*.074,
-                child: Lottie.asset("assets/lotties/barsmusic.json",animate: SongsProperties.Lottie,)
+                child: widget.play
             )
         ),
       ],

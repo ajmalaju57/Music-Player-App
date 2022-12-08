@@ -23,6 +23,8 @@ class _HomeViewState extends State<HomeView> {
   //Player
   final AudioPlayer _audioPlayer = AudioPlayer();
 
+  List<SongModel>allSongs = [];
+
   @override
   void initState() {
     super.initState();
@@ -53,6 +55,7 @@ class _HomeViewState extends State<HomeView> {
     print(size.height);
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: true,
         backgroundColor: Color(0xFF000633),
         body: PageView(
           physics: NeverScrollableScrollPhysics(),
@@ -65,7 +68,24 @@ class _HomeViewState extends State<HomeView> {
           children: [
             Column(
               children: [
-                TopCard(),
+                TopCard(play: SizedBox(
+                  width: 40,
+                  child: InkWell(
+                    onTap: (){
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MusicView(songModelList:allSongs,audioPlayer: _audioPlayer)));
+                    },
+                    child: Align(
+                      alignment: Alignment.bottomRight,
+                      child: CircleAvatar(
+                        backgroundColor: Colors.white,
+                        child: Icon(Icons.play_arrow,color: Color(0xFF000633),),
+                      ),
+                    ),
+                  ),
+                )),
                 Expanded(
                   child: FutureBuilder<List<SongModel>>(
                       future: _audioQuery.querySongs(
@@ -90,6 +110,7 @@ class _HomeViewState extends State<HomeView> {
                         return ListView.builder(
                             itemCount: item.data!.length,
                             itemBuilder: (context, index) {
+                              allSongs.addAll(item.data!);
                               QueryArtworkWidget id = QueryArtworkWidget(
                                 type: ArtworkType.AUDIO,
                                 id: item.data![index].id,
@@ -104,10 +125,13 @@ class _HomeViewState extends State<HomeView> {
                                     ),
                                     InkWell(
                                       onTap: ()  {
+                                        setState(() {
+                                          SongsProperties.SongIndex = index;
+                                        });
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                                builder: (context) => MusicView(songModel: item.data![index],audioPlayer: _audioPlayer,SongThumb: id,)));
+                                                builder: (context) => MusicView(songModelList: [item.data![index]],audioPlayer: _audioPlayer,SongThumb: id,)));
                                       },
                                       child: Container(
                                         margin: EdgeInsets.only(
@@ -207,13 +231,14 @@ class _HomeViewState extends State<HomeView> {
                               );
                             });
                       }),
-                )
+                ),
               ],
             ),
             FavoritePage(),
             Playlist(),
           ],
         ),
+
         bottomNavigationBar: BottomNavigationBar(
           onTap: (index) {
             setState(() {
