@@ -1,10 +1,7 @@
-
-
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:music_player/Controller/songsProperties.dart';
+import 'package:music_player/View/viewPlaylist.dart';
 
 import 'musicView.dart';
 
@@ -115,10 +112,7 @@ class _PlaylistState extends State<Playlist> {
                           ),
                           InkWell(
                             onTap: () {
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (context) => MusicView()));
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>ViewPlaylist()));
                             },
                             child: Container(
                               margin:

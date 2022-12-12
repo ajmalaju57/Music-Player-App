@@ -87,7 +87,8 @@ class _HomeViewState extends State<HomeView> {
                   ),
                 )),
                 Expanded(
-                  child: FutureBuilder<List<SongModel>>(
+                  child:
+                  FutureBuilder<List<SongModel>>(
                       future: _audioQuery.querySongs(
                         sortType: SongSortType.TITLE,
                         uriType: UriType.EXTERNAL,
@@ -107,7 +108,8 @@ class _HomeViewState extends State<HomeView> {
                           );
                         }
                         // List<SongModel> songs=item.data!;
-                        return ListView.builder(
+                        return
+                          ListView.builder(
                             itemCount: item.data!.length,
                             itemBuilder: (context, index) {
                               allSongs.addAll(item.data!);
@@ -125,15 +127,13 @@ class _HomeViewState extends State<HomeView> {
                                     ),
                                     InkWell(
                                       onTap: ()  {
-                                        setState(() {
-                                          SongsProperties.SongIndex = index;
-                                        });
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) => MusicView(songModelList: [item.data![index]],audioPlayer: _audioPlayer,SongThumb: id,)));
                                       },
-                                      child: Container(
+                                      child:
+                                      Container(
                                         margin: EdgeInsets.only(
                                             top: 15, right: 12, left: 15),
                                         padding: EdgeInsets.symmetric(
