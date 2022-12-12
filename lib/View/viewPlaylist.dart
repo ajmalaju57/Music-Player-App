@@ -20,7 +20,7 @@ class _ViewPlaylistState extends State<ViewPlaylist> {
   final AudioPlayer _audioPlayer = AudioPlayer();
 
   List<SongModel>allSongs = [];
-  List<SongModel>playlist= [];
+
 
   @override
   void initState() {
@@ -165,7 +165,7 @@ class _ViewPlaylistState extends State<ViewPlaylist> {
                                                         child: InkWell(
                                                             onTap: () async {
                                                               setState(() {
-                                                                  playlist.add(item.data![index]);
+                                                                  SongsProperties.playlist.add(item.data![index]);
                                                               });
                                                             },
                                                             child: Icon(Icons.add_circle,color:  Color(0xFF000633),)
@@ -191,7 +191,7 @@ class _ViewPlaylistState extends State<ViewPlaylist> {
         children: [
       Expanded(
         child: ListView.builder(
-        itemCount: playlist.length,
+        itemCount: SongsProperties.playlist.length,
             itemBuilder: (context, index) {
               // allSongs.addAll(item.data!);
               // QueryArtworkWidget id = QueryArtworkWidget(
@@ -211,7 +211,7 @@ class _ViewPlaylistState extends State<ViewPlaylist> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => MusicView(songModelList: [playlist[index]],audioPlayer: _audioPlayer,)));
+                                builder: (context) => MusicView(songModelList: [SongsProperties.playlist[index]],audioPlayer: _audioPlayer,)));
                       },
                       child:
                       Container(
@@ -243,7 +243,7 @@ class _ViewPlaylistState extends State<ViewPlaylist> {
                                 SizedBox(
                                   width: 200,
                                   child: Text(
-                                    playlist[index].title,
+                                    SongsProperties.playlist[index].title,
                                     overflow:
                                     TextOverflow.ellipsis,
                                     maxLines: 1,
@@ -259,7 +259,7 @@ class _ViewPlaylistState extends State<ViewPlaylist> {
                                 SizedBox(
                                   width: 200,
                                   child: Text(
-                                    playlist[index].artist ?? "No Artist", overflow: TextOverflow.ellipsis,
+                                    SongsProperties.playlist[index].artist ?? "No Artist", overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
                                     softWrap: false,
                                     style: TextStyle(color: Colors.white.withOpacity(0.8),fontSize: 16,),
@@ -279,7 +279,7 @@ class _ViewPlaylistState extends State<ViewPlaylist> {
                               child: InkWell(
                                   onTap: ()  {
                                     setState(() {
-                                      playlist.removeAt(index);
+                                      SongsProperties.playlist.removeAt(index);
                                     });
                                   },
                                 child: Icon(Icons.delete,color:Colors.red,),

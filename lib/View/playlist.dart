@@ -158,7 +158,7 @@ class _PlaylistState extends State<Playlist> {
                                         width: 200,
                                         child:
                                         Text(
-                                          "5 Songs",
+                                          SongsProperties.playlist.length.toString(),
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 1,
                                           softWrap: false,
