@@ -6,8 +6,6 @@ class SongsProperties{
   static QueryArtworkWidget? ThumbImage;
   static bool? Lottie=false;
   static bool isPlaying = false;
-  static dynamic FaveSongMusicName=[];
-  static dynamic FaveSongSingerName=[];
   static dynamic PlaylistName=[];
   static  List<SongModel>playlist= [];
   static List<SongModel>FavoriteSongs = [];

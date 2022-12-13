@@ -158,7 +158,7 @@ class _PlaylistState extends State<Playlist> {
                                         width: 200,
                                         child:
                                         Text(
-                                          SongsProperties.playlist.length.toString(),
+                                         "${SongsProperties.playlist.isNotEmpty?SongsProperties.playlist.length.toString():"0"} Songs",
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 1,
                                           softWrap: false,
