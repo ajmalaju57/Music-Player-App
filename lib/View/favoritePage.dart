@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:music_player/Controller/songsProperties.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 
 import 'musicView.dart';
 
@@ -12,6 +14,14 @@ class FavoritePage extends StatefulWidget {
 }
 
 class _FavoritePageState extends State<FavoritePage> {
+
+  //on Audio Query
+  final OnAudioQuery _audioQuery = OnAudioQuery();
+  //Player
+  final AudioPlayer _audioPlayer = AudioPlayer();
+
+  List<SongModel>allSongs = [];
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -20,8 +30,9 @@ class _FavoritePageState extends State<FavoritePage> {
         // backgroundColor: Color.fromRGBO(181, 194, 247, 1),
         body: Container(
           child: ListView.builder(
-              itemCount: SongsProperties.FaveSongSingerName.length,
+              itemCount: SongsProperties.FavoriteSongs.length,
               itemBuilder: (context,index) {
+                allSongs.addAll(SongsProperties.FavoriteSongs);
                 int index1 = index+1;
                 return SingleChildScrollView(
                   child: Column(
@@ -29,7 +40,10 @@ class _FavoritePageState extends State<FavoritePage> {
                       SizedBox(height: 15,),
                       InkWell(
                         onTap: (){
-                          // Navigator.push(context, MaterialPageRoute(builder: (context)=>MusicView()));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MusicView(songModelList: [SongsProperties.FavoriteSongs[index]],audioPlayer: _audioPlayer,)));
                         },
                         child: Container(
                           margin: EdgeInsets.only(top: 15,right: 12,left: 15),
@@ -46,14 +60,14 @@ class _FavoritePageState extends State<FavoritePage> {
                                 children: [
                                   SizedBox(
                                     width: 180,
-                                    child: Text(SongsProperties.FaveSongMusicName[index], overflow:
+                                    child: Text(SongsProperties.FavoriteSongs[index].title, overflow:
                                     TextOverflow.ellipsis,style: TextStyle(color: Colors.white,fontWeight: FontWeight.w500,fontSize: 17),),
                                   ),
                                   Row(
                                     children: [
                                       SizedBox(
                                           width: 180,
-                                          child: Text(SongsProperties.FaveSongSingerName[index],overflow:
+                                          child: Text(SongsProperties.FavoriteSongs[index].artist ?? "No Artist",overflow:
                                           TextOverflow.ellipsis,style: TextStyle(color: Colors.white.withOpacity(0.8),fontSize: 16),)),
                                     ],
                                   )
@@ -63,29 +77,10 @@ class _FavoritePageState extends State<FavoritePage> {
                               InkWell(
                                 onTap: (){
                                   setState(() {
-                                    SongsProperties.FaveSongMusicName.removeAt(index);
-                                    SongsProperties.FaveSongSingerName.removeAt(index);
-                                    print(SongsProperties.FaveSongMusicName);
+                                    SongsProperties.FavoriteSongs.removeAt(index);
                                   });
                                 },
                                   child: Icon(Icons.favorite,color: Colors.green,)),
-                              SizedBox(width: 10,),
-                              Container(
-                                height: 35,
-                                width: 35,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
-                                child: InkWell(
-                                    onTap: (){
-                                      // setState((){
-                                      //   selected_index = index;
-                                      //   print(selected_index);
-                                      // });
-                                    },
-                                    child: Icon(Icons.play_arrow,size: 25,color: Color(0xFF000633),)),
-                              ),
                             ],
                           ),
                         ),
@@ -96,6 +91,20 @@ class _FavoritePageState extends State<FavoritePage> {
 
               }
           ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: (){
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MusicView(songModelList:allSongs,audioPlayer: _audioPlayer)));
+          },
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          child: Icon(Icons.play_circle,color:Colors.white,size: 50,),
+           shape: BeveledRectangleBorder(
+            borderRadius:BorderRadius.circular(200)
+        ),
         ),
       ),
     );

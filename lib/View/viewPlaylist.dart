@@ -44,7 +44,14 @@ class _ViewPlaylistState extends State<ViewPlaylist> {
         automaticallyImplyLeading: false,
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Icon(Icons.play_circle,color: Colors.white,size: 40,),
+        title: InkWell(
+            onTap: (){
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MusicView(songModelList:allSongs,audioPlayer: _audioPlayer)));
+            },
+            child: Icon(Icons.play_circle,color: Colors.white,size: 40,)),
         actions: [
           InkWell(
               onTap: (){

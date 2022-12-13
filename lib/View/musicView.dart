@@ -152,8 +152,8 @@ class _MusicViewState extends State<MusicView> {
                                 }else{
                                   _isFavoriteSongsIcon = false;
                                 }
-                                SongsProperties.FaveSongMusicName.add(widget.songModelList![currentIndex].title);
-                                SongsProperties.FaveSongSingerName.add(widget.songModelList![currentIndex].artist??"No Artist");
+                                SongsProperties.FavoriteSongs.add(widget.songModelList![currentIndex]);
+                                // SongsProperties.FaveSongSingerName.add(widget.songModelList![currentIndex].artist??"No Artist");
                               });
                             },
                             child: Container(
