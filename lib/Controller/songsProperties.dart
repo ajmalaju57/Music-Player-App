@@ -4,7 +4,7 @@ class SongsProperties{
   static String? MusicName='MusicName';
   static String? SingerName='SingerName';
   static QueryArtworkWidget? ThumbImage;
-  static bool? Lottie=false;
+  static bool Lottie=false;
   static bool isPlaying = false;
   static dynamic PlaylistName=[];
   static  List<SongModel>playlist= [];

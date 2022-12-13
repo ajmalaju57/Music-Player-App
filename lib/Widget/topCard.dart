@@ -1,6 +1,7 @@
 import 'package:blurrycontainer/blurrycontainer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:music_player/Controller/songsProperties.dart';
 
 class TopCard extends StatefulWidget {
@@ -27,8 +28,18 @@ class _TopCardState extends State<TopCard> {
                       fit: BoxFit.cover),
                   borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30),bottomRight: Radius.circular(30),)
               ),
-          child: SongsProperties.ThumbImage,
+          child:SongsProperties.ThumbImage,
             ),
+        Container(margin: EdgeInsets.symmetric(horizontal: 120),
+          width: 140,
+          height: 20,
+          decoration: BoxDecoration(
+            color: Colors.black,
+            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(14),bottomRight:Radius.circular(14))
+          ),
+          child: Lottie.asset("assets/lotties/barsmusic.json",
+            fit: BoxFit.fill,animate:SongsProperties.Lottie)
+        ),
         Padding(
           padding:  EdgeInsets.only(top: size.height*.261,left: size.width*.050),
           child: Text(SongsProperties.MusicName!,overflow: TextOverflow.ellipsis,style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 20),),
@@ -44,7 +55,7 @@ class _TopCardState extends State<TopCard> {
                 blur: 30,
                 elevation: 6,
                 height: size.height*.074,
-                child: widget.play
+                child: widget.play,
             )
         ),
       ],

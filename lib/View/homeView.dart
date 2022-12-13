@@ -116,6 +116,7 @@ class _HomeViewState extends State<HomeView> {
                               QueryArtworkWidget id = QueryArtworkWidget(
                                 type: ArtworkType.AUDIO,
                                 id: item.data![index].id,
+                                nullArtworkWidget:Container(),
                                 artworkBorder: BorderRadius.only(bottomLeft: Radius.circular(30),bottomRight: Radius.circular(30),)
                               );
                               int index1 = index + 1;
